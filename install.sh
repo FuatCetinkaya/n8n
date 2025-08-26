@@ -1,18 +1,3 @@
-#!/bin/bash
-set -e
-
-mkdir -p ~/n8n-docker
-cd ~/n8n-docker
-
-# Self-signed sertifika oluştur
-mkdir -p certs
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout certs/selfsigned.key \
-  -out certs/selfsigned.crt \
-  -subj "/CN=localhost"
-
-
-cat > docker-compose.yml << 'EOF'
 version: "3.8"
 
 services:
@@ -39,10 +24,12 @@ services:
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=n8n
       - DB_POSTGRESDB_PASSWORD=n8npassword
-      - N8N_HOST=$(curl -s ifconfig.me)
+      # HTTP
+      - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - NODE_ENV=production
+      # HTTPS
       - N8N_SSL_KEY=/certs/selfsigned.key
       - N8N_SSL_CERT=/certs/selfsigned.crt
       - N8N_PORT_HTTPS=5679
@@ -51,7 +38,3 @@ services:
     volumes:
       - ./n8n-data:/home/node/.n8n
       - ./certs:/certs
-EOF
-
-
-#docker compose up -d
