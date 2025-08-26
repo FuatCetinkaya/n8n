@@ -53,8 +53,7 @@ services:
     volumes:
       - ./n8n:/home/node/.n8n
       - ./certs:/certs
-    command: >
-      sh -c "n8n start --tunnel"
+    command: "start --tunnel"
 EOF
 
 # 4. Self-signed SSL üret (dns yok diye)
