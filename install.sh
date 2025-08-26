@@ -60,7 +60,7 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - NODE_ENV=production
-      - N8N_SECURE_COOKIE=FALSE
+      - N8N_SECURE_COOKIE=false
     volumes:
       - ./n8n-data:/home/node/.n8n
 EOF
