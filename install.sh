@@ -15,8 +15,7 @@ services:
     image: n8nio/n8n:latest
     restart: always
     ports:
-      - "5678:5678"   # HTTP
-      - "5679:5679"   # HTTPS
+      - "5678:5678"
     environment:
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
@@ -24,17 +23,11 @@ services:
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=n8n
       - DB_POSTGRESDB_PASSWORD=n8npassword
-      # HTTP
-      - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
+      - N8N_HOST=0.0.0.0
       - NODE_ENV=production
-      # HTTPS
-      - N8N_SSL_KEY=/certs/selfsigned.key
-      - N8N_SSL_CERT=/certs/selfsigned.crt
-      - N8N_PORT_HTTPS=5679
     depends_on:
       - postgres
     volumes:
       - ./n8n-data:/home/node/.n8n
-      - ./certs:/certs
