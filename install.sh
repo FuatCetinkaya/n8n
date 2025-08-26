@@ -1,15 +1,18 @@
-version: "3.8"
+#!/bin/bash
+set -e
 
+cat > docker-compose.yml <<'EOF'
+version: '3.7'
 services:
   postgres:
     image: postgres:15
     restart: always
     environment:
       POSTGRES_USER: n8n
-      POSTGRES_PASSWORD: n8npassword
+      POSTGRES_PASSWORD: n8n
       POSTGRES_DB: n8n
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - ./db-data:/var/lib/postgresql/data
 
   n8n:
     image: n8nio/n8n:latest
@@ -22,12 +25,16 @@ services:
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=n8n
-      - DB_POSTGRESDB_PASSWORD=n8npassword
+      - DB_POSTGRESDB_PASSWORD=n8n
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin123
+      - N8N_HOST=45.155.124.82
       - N8N_PORT=5678
-      - N8N_PROTOCOL=http
-      - N8N_HOST=0.0.0.0
-      - NODE_ENV=production
     depends_on:
       - postgres
     volumes:
       - ./n8n-data:/home/node/.n8n
+EOF
+
+docker compose up -d
